@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include "Timer.h"
 #include "KeyBindButton.h"
-
 
 class WindowManager
 {
@@ -24,7 +24,10 @@ private:
 	KeyBindButton bindButtons[3];
 	sf::RectangleShape splitsBorder;
 	sf::Text splitsTitleText;
+	bool grabbedWindow;
+	sf::Vector2i grabbedOffset;
 
 	Timer* timer;
 	KeybindManager* kbm;
 };
+

@@ -4,6 +4,8 @@ WindowManager::WindowManager(Timer* timer, KeybindManager* kbm)
 {
     this->timer = timer;
     this->kbm = kbm;
+    grabbedWindow = false;
+
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
     windowSize = sf::VideoMode(400, 600);
@@ -53,16 +55,16 @@ WindowManager::WindowManager(Timer* timer, KeybindManager* kbm)
     splitsText.setFont(font);
     splitsText.setCharacterSize(14);
     splitsText.setFillColor(sf::Color::White);
-    splitsText.setPosition(splitsBorder.getPosition() + sf::Vector2f(16.0f, 16.0f));
+    splitsText.setPosition(splitsBorder.getPosition() + sf::Vector2f(8.0f, 16.0f));
     splitsText.setLineSpacing(1.5f);
 
     splitsBarText = splitsText;
     splitsBarText.setStyle(sf::Text::Underlined);
-    splitsBarText.setString("Split    Total Time    Split Time    Var    ");
+    splitsBarText.setString(" Split    Total Time    Split Time    Var    ");
 }
 
 std::string getSplitsString(Timer* timer) {
-    std::string str = "\n";
+    std::string str = "\n ";
     sf::Time tmp;
 
     for (int i = timer->splits.size() - 1; (i >= 0) && (i >= int(timer->splits.size()) - 6); i--) {
@@ -94,7 +96,7 @@ std::string getSplitsString(Timer* timer) {
             str.append(Timer::getTimeString(tmp).substr(3));
         }
 
-        str.append("\n");
+        str.append("\n ");
     }
 
     return str;
@@ -127,12 +129,35 @@ void WindowManager::Tick()
     while (window.pollEvent(event))
     {
         // "close requested" event: we close the window
-        if (event.type == sf::Event::Closed)
+        if (event.type == sf::Event::Closed) {
             window.close();
+        }
+        else if (event.type == sf::Event::MouseButtonPressed)
+        {
+            if (event.mouseButton.button == sf::Mouse::Left)
+            {
+                grabbedOffset = window.getPosition() - sf::Mouse::getPosition();
+                grabbedWindow = true;
+                window.setFramerateLimit(360);
+            }
+        }
+        else if (event.type == sf::Event::MouseButtonReleased)
+        {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                grabbedWindow = false;
+                window.setFramerateLimit(30);
+            }
+        }
+        else if (event.type == sf::Event::MouseMoved)
+        {
+            if (grabbedWindow)
+                window.setPosition(sf::Mouse::getPosition() + grabbedOffset);
+        }
     }
 
-    window.clear(sf::Color(35, 35, 35));
+    window.clear(sf::Color(35, 35, 35, 35));
     drawComponents(timer);
     window.display();
 
 }
+
