@@ -1,7 +1,6 @@
-﻿  KeybindManager.cpp
-  Generating code
-  45 of 430 functions (10.5%) were compiled, the rest were copied from previous compilation.
+﻿  Generating code
+  0 of 430 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    26 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  BackgroundTimer.vcxproj -> C:\Users\theun\source\repos\BackgroundTimer\x64\Release\BackgroundTimer.exe
+  BackgroundTimer.vcxproj -> R:\BackgroundTimer\x64\Release\BackgroundTimer.exe

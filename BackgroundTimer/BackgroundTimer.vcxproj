@@ -136,8 +136,16 @@
   <ItemGroup>
     <ClInclude Include="KeyBindButton.h" />
     <ClInclude Include="KeybindManager.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="WindowManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BackgroundTimer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\theun\Downloads\icon.ico" />
+    <Image Include="icon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
