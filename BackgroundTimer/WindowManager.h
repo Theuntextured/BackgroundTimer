@@ -26,6 +26,8 @@ private:
 	sf::Text splitsTitleText;
 	bool grabbedWindow;
 	sf::Vector2i grabbedOffset;
+	sf::CircleShape closeButton;
+	sf::Texture closeButtonTex;
 
 	Timer* timer;
 	KeybindManager* kbm;

@@ -9,13 +9,21 @@ WindowManager::WindowManager(Timer* timer, KeybindManager* kbm)
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
     windowSize = sf::VideoMode(400, 600);
-	window.create(windowSize, "Background Timer", sf::Style::Close, settings);
+	window.create(windowSize, "Background Timer", sf::Style::None, settings);
 	window.setFramerateLimit(30);
     font.loadFromFile("Anonymous_Pro.ttf");
     arial.loadFromFile("arial.ttf");
     sf::Image icon;
     icon.loadFromFile("icon.png");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+    closeButtonTex.loadFromFile("closeButton.png");
+    closeButtonTex.setSmooth(true);
+    closeButton.setRadius(16.0f);
+    closeButton.setTexture(&closeButtonTex);
+    closeButton.setOrigin(timerCircle.getRadius(), timerCircle.getRadius());
+    closeButton.setPosition(windowSize.width - 48.0f, 16.0f);
+    closeButton.setFillColor(sf::Color(255, 255, 255, 255));
 
     timerCircle.setRadius(128.0f);
     timerCircle.setFillColor(sf::Color(150, 150, 200));
@@ -61,6 +69,7 @@ WindowManager::WindowManager(Timer* timer, KeybindManager* kbm)
     splitsBarText = splitsText;
     splitsBarText.setStyle(sf::Text::Underlined);
     splitsBarText.setString(" Split    Total Time    Split Time    Var    ");
+
 }
 
 std::string getSplitsString(Timer* timer) {
@@ -120,6 +129,7 @@ void WindowManager::drawComponents(Timer* timer) {
     window.draw(splitsTitleText);
     window.draw(splitsText);
     window.draw(splitsBarText);
+    window.draw(closeButton);
 }
 
 void WindowManager::Tick()
@@ -128,6 +138,16 @@ void WindowManager::Tick()
     sf::Event event;
     while (window.pollEvent(event))
     {
+        auto mousePos = sf::Vector2f(sf::Mouse::getPosition(window)) - closeButton.getPosition() - sf::Vector2f(closeButton.getRadius(), closeButton.getRadius());
+        if ((mousePos.x * mousePos.x + mousePos.y * mousePos.y) <= closeButton.getRadius() * closeButton.getRadius()) {
+            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+                window.close();
+            }
+            closeButton.setFillColor(sf::Color(255, 0, 0, 255));
+        }
+        else {
+            closeButton.setFillColor(sf::Color(255, 255, 255, 255));
+        }
         // "close requested" event: we close the window
         if (event.type == sf::Event::Closed) {
             window.close();
@@ -158,6 +178,5 @@ void WindowManager::Tick()
     window.clear(sf::Color(35, 35, 35, 35));
     drawComponents(timer);
     window.display();
-
 }
 

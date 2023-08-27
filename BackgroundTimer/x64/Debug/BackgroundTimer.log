@@ -1,2 +1,5 @@
-﻿  KeybindManager.cpp
+﻿  WindowManager.cpp
+C:\Users\theun\source\repos\BackgroundTimer\BackgroundTimer\WindowManager.cpp(33,69): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\theun\source\repos\BackgroundTimer\BackgroundTimer\WindowManager.cpp(33,46): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\theun\source\repos\BackgroundTimer\BackgroundTimer\WindowManager.cpp(79,5): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   BackgroundTimer.vcxproj -> C:\Users\theun\source\repos\BackgroundTimer\x64\Debug\BackgroundTimer.exe
