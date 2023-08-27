@@ -11,7 +11,7 @@ class KeyBindButton : public sf::RectangleShape
 public:
 	KeyBindButton();
 	KeyBindButton(KeyboardAction action, sf::Font* font, KeybindManager* kbm);
-	void updateButton(sf::RenderWindow* window);
+	void updateButton(sf::RenderWindow* window, bool draw);
 private:
 	KeybindManager* kbm;
 	KeyboardAction action;

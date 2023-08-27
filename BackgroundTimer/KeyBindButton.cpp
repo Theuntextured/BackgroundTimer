@@ -24,7 +24,7 @@ KeyBindButton::KeyBindButton(KeyboardAction action, sf::Font* font, KeybindManag
     isPressed = false;
 }
 
-void KeyBindButton::updateButton(sf::RenderWindow* window)
+void KeyBindButton::updateButton(sf::RenderWindow* window, bool draw)
 {
     //check if being pressed
     sf::FloatRect bounds = getGlobalBounds();
@@ -41,6 +41,7 @@ void KeyBindButton::updateButton(sf::RenderWindow* window)
         isPressed = false;
     }
 
+    if (!draw) return;
     if (kbm->rebind != action) {
         text.setString(actionNames[action] + ": " + keyNames[kbm->keybinds[action]]);
     }

@@ -1,4 +1,8 @@
 #include "WindowManager.h"
+#include <Windows.h>
+#include <Dwmapi.h>
+
+#pragma comment (lib, "Dwmapi.lib")
 
 WindowManager::WindowManager(Timer* timer, KeybindManager* kbm)
 {
@@ -8,7 +12,7 @@ WindowManager::WindowManager(Timer* timer, KeybindManager* kbm)
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
-    windowSize = sf::VideoMode(400, 600);
+    windowSize = sf::VideoMode(400, 400);
 	window.create(windowSize, "Background Timer", sf::Style::None, settings);
 	window.setFramerateLimit(30);
     font.loadFromFile("Anonymous_Pro.ttf");
@@ -16,30 +20,27 @@ WindowManager::WindowManager(Timer* timer, KeybindManager* kbm)
     sf::Image icon;
     icon.loadFromFile("icon.png");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+    MARGINS margins;
+    margins.cxLeftWidth = -1;
+    SetWindowLong(window.getSystemHandle(), GWL_STYLE, WS_POPUP | WS_VISIBLE);
+    DwmExtendFrameIntoClientArea(window.getSystemHandle(), &margins);
+
 
     closeButtonTex.loadFromFile("closeButton.png");
     closeButtonTex.setSmooth(true);
     closeButton.setRadius(16.0f);
     closeButton.setTexture(&closeButtonTex);
-    closeButton.setOrigin(timerCircle.getRadius(), timerCircle.getRadius());
-    closeButton.setPosition(windowSize.width - 48.0f, 16.0f);
+    closeButton.setOrigin(closeButton.getRadius(), closeButton.getRadius());
+    closeButton.setPosition(windowSize.width - 32.0f, 32.0f);
     closeButton.setFillColor(sf::Color(255, 255, 255, 255));
-
-    timerCircle.setRadius(128.0f);
-    timerCircle.setFillColor(sf::Color(150, 150, 200));
-    timerCircle.setOutlineThickness(16.0f);
-    timerCircle.setOutlineColor(sf::Color(0, 0, 0));
-    timerCircle.setOrigin(timerCircle.getRadius(), timerCircle.getRadius());
-    timerCircle.setPosition(windowSize.width / 2, windowSize.height / 4);
-    timerCircle.setPointCount(64);
 
     mainTimerText.setString("00:00:000");
     mainTimerText.setFont(font);
     mainTimerText.setCharacterSize(32);
-    mainTimerText.setFillColor(sf::Color(230, 255, 230));
+    mainTimerText.setFillColor(sf::Color(255, 255, 255));
     mainTimerText.setStyle(sf::Text::Bold);
     mainTimerText.setOrigin(mainTimerText.getLocalBounds().width / 2, mainTimerText.getLocalBounds().height);
-    mainTimerText.setPosition(timerCircle.getPosition());
+    mainTimerText.setPosition(windowSize.width / 2, 48.0f);
 
     for (int i = 0; i < 3; i++) {
         bindButtons[i] = KeyBindButton(static_cast<KeyboardAction>(i), &arial, kbm);
@@ -47,10 +48,8 @@ WindowManager::WindowManager(Timer* timer, KeybindManager* kbm)
     }
 
     splitsBorder.setSize(sf::Vector2f(windowSize.width - 24.0f, 180.0f));
-    splitsBorder.setPosition(12.0f, 320.0f);
+    splitsBorder.setPosition(12.0f, 64.0f);
     splitsBorder.setOutlineThickness(4.0f);
-    splitsBorder.setOutlineColor(sf::Color::Black);
-    splitsBorder.setFillColor(sf::Color(50, 50, 50));
 
     splitsTitleText.setFont(font);
     splitsTitleText.setCharacterSize(24);
@@ -113,32 +112,36 @@ std::string getSplitsString(Timer* timer) {
 
 void WindowManager::drawComponents(Timer* timer) {
 
-    window.draw(timerCircle);
 
     std::string mainTimerStr = Timer::getTimeString((timer->state == Running) ? timer->currentTimeElapsed + timer->mainTimer.getElapsedTime() : timer->currentTimeElapsed);
     mainTimerText.setString(mainTimerStr);
 
     for (int i = 0; i < 3; i++) {
-        bindButtons[i].updateButton(&window);
+        bindButtons[i].updateButton(&window, isHovering);
     }
 
     splitsText.setString(getSplitsString(timer));
 
     window.draw(mainTimerText);
+    splitsBorder.setFillColor(sf::Color(50, 50, 50, isHovering ? 255 : 80));
+    splitsBorder.setOutlineColor(sf::Color(0, 0, 0, isHovering ? 255 : 80));
     window.draw(splitsBorder);
-    window.draw(splitsTitleText);
+    if (isHovering) window.draw(splitsTitleText);
     window.draw(splitsText);
     window.draw(splitsBarText);
-    window.draw(closeButton);
+    if(isHovering) window.draw(closeButton);
 }
 
 void WindowManager::Tick()
 {
+    auto mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+    isHovering = mousePos.x >= 0 && mousePos.y >= 0 && mousePos.x <= windowSize.width && mousePos.y <= windowSize.height;
+
     // check all the window's events that were triggered since the last iteration of the loop
     sf::Event event;
     while (window.pollEvent(event))
     {
-        auto mousePos = sf::Vector2f(sf::Mouse::getPosition(window)) - closeButton.getPosition() - sf::Vector2f(closeButton.getRadius(), closeButton.getRadius());
+        auto mousePos = sf::Vector2f(sf::Mouse::getPosition(window)) - closeButton.getPosition();
         if ((mousePos.x * mousePos.x + mousePos.y * mousePos.y) <= closeButton.getRadius() * closeButton.getRadius()) {
             if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
                 window.close();
@@ -175,8 +178,11 @@ void WindowManager::Tick()
         }
     }
 
-    window.clear(sf::Color(35, 35, 35, 35));
+    window.clear(isHovering ? sf::Color(35, 35, 35, 95) : sf::Color::Transparent);
     drawComponents(timer);
     window.display();
+
+    HWND hwnd = window.getSystemHandle();
+    SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 }
 

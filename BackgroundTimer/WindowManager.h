@@ -17,7 +17,6 @@ private:
 	void drawComponents(Timer* timer);
 	sf::Font font;
 	sf::Font arial;
-	sf::CircleShape timerCircle;
 	sf::Text mainTimerText;
 	sf::Text splitsText;
 	sf::Text splitsBarText;
@@ -28,6 +27,7 @@ private:
 	sf::Vector2i grabbedOffset;
 	sf::CircleShape closeButton;
 	sf::Texture closeButtonTex;
+	bool isHovering;
 
 	Timer* timer;
 	KeybindManager* kbm;

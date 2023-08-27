@@ -1,1 +1,2 @@
 R:\BackgroundTimer\BackgroundTimer\x64\Release\BackgroundTimer.vcxproj.CopyComplete
+C:\Users\theun\source\repos\BackgroundTimer\BackgroundTimer\x64\Release\BackgroundTimer.vcxproj.CopyComplete
