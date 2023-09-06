@@ -17,12 +17,16 @@ public:
 	void tick();
 
 	std::map<KeyboardAction, sf::Keyboard::Key> keybinds;
+	std::map<KeyboardAction, int> joystickButtons;
 	KeyboardAction rebind;
 private:
 	void keyPressed(sf::Keyboard::Key key);
+	void buttonPressed(int button);
 	void saveKeybinds();
 
 	bool* isKeyDown;
+	bool* isButtonDown;
+	int buttonCount;
 	Timer* timer;
 
 };

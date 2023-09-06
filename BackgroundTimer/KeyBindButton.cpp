@@ -16,7 +16,7 @@ KeyBindButton::KeyBindButton(KeyboardAction action, sf::Font* font, KeybindManag
     this->kbm = kbm;
     this->action = action;
 
-    setSize(sf::Vector2f(112.0f, 32.0f));
+    setSize(sf::Vector2f(112.0f, 64.0f));
     setOutlineThickness(4.0f);
     setOutlineColor(sf::Color::Black);
     setFillColor(sf::Color(50, 50, 50));
@@ -43,7 +43,7 @@ void KeyBindButton::updateButton(sf::RenderWindow* window, bool draw)
 
     if (!draw) return;
     if (kbm->rebind != action) {
-        text.setString(actionNames[action] + ": " + keyNames[kbm->keybinds[action]]);
+        text.setString(actionNames[action] + ":\n" + keyNames[kbm->keybinds[action]] + "\nButton " + std::to_string(kbm->joystickButtons[action]));
     }
     else {
         text.setString(" ... ");

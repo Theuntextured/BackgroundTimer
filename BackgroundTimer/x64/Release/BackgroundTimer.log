@@ -1,9 +1,7 @@
-﻿  WindowManager.cpp
-C:\Users\theun\source\repos\BackgroundTimer\BackgroundTimer\WindowManager.cpp(43,48): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-C:\Users\theun\source\repos\BackgroundTimer\BackgroundTimer\WindowManager.cpp(78,5): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+﻿  KeybindManager.cpp
   Generating code
-  1 of 436 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+  0 of 530 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   BackgroundTimer.vcxproj -> C:\Users\theun\source\repos\BackgroundTimer\x64\Release\BackgroundTimer.exe
