@@ -43,7 +43,7 @@ void KeyBindButton::updateButton(sf::RenderWindow* window, bool draw)
 
     if (!draw) return;
     if (kbm->rebind != action) {
-        text.setString(actionNames[action] + ":\n" + keyNames[kbm->keybinds[action]] + "\nButton " + std::to_string(kbm->joystickButtons[action]));
+        text.setString(actionNames[action] + ":\n" + keyNames[kbm->keybinds[action]] + "\nButton " + std::to_string(kbm->joystickButtons[action].buttonID));
     }
     else {
         text.setString(" ... ");
